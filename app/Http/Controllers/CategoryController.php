@@ -14,7 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        $categories = Category::all();
+
+        return view('category.index', compact('categories'));
     }
 
     /**
@@ -50,7 +52,7 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::with('posts')->findOrFail($id);
 
         return $category;
     }
