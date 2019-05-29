@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->unsignedBigInteger('category_id');
             $table->string('title');
             $table->text('body');
-            $table->boolean('is_image_only')->default(false);
+//            $table->boolean('is_image_only')->default(false);
             $table->text('image')->nullable();
             $table->text('youtube_link')->nullable();
             $table->timestamps();

@@ -17,6 +17,9 @@ class Post extends Model
 
     public function getImageAttribute($value)
     {
+        if($value === null) {
+            return $value;
+        }
         if(filter_var($value, FILTER_VALIDATE_URL)) {
             return $value;
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Post;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
 
 class PostController extends Controller
 {
@@ -15,7 +16,27 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')->get();
+        $categoryId = Input::get('category_id');
+
+        if($categoryId === '' || $categoryId === null) {
+            $posts = Post::with('category')->get();
+        } else {
+            $posts = Post::with('category')->where('category_id', $categoryId)->get();
+        }
+
+        $posts->map(function ($item, $key) {
+            $contentTypes = [];
+            if($item->image !== null && $item->youtube_link === null) {
+                $contentTypes[] = 'image only';
+            }
+            if($item->youtube_link !== null && $item->image === null) {
+                $contentTypes[] = 'youtube only';
+            }
+            if($item->youtube_link !== null && $item->image !== null) {
+                $contentTypes[] = 'both image and youtube';
+            }
+            $item['content_type'] = implode('/', $contentTypes);
+        });
         return response()->json($posts);
     }
 

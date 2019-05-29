@@ -5,7 +5,24 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">All Posts <a href="{{ route('posts.create') }}" class="btn btn-success float-right">Add posts</a> </div>
+                    <div class="card-header">
+                        All Posts
+                        <a href="{{ route('posts.create') }}" class="btn btn-success float-right">Add posts</a>
+                    </div>
+                    <div class="card-header">
+                            <form class="form-inline">
+                                <div class="form-group mx-sm-3 mb-2">
+                                    <label for="inputPassword2" class="sr-only">Choose category</label>
+                                    <select class="form-control" name="category_id">
+                                        <option value="">Choose category</option>
+                                        @foreach($categories as $category)
+                                            <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                            @endforeach
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary mb-2">Filter</button>
+                            </form>
+                    </div>
                     <div class="card-body">
 
                         <table class="table table-bordered">

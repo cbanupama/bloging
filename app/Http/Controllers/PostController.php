@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
@@ -16,9 +17,16 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::with('category')->get();
+        $categoryId = Input::get('category_id');
 
-        return view('post.index', compact('posts'));
+        if($categoryId === '' || $categoryId === null) {
+            $posts = Post::with('category')->get();
+        } else {
+            $posts = Post::with('category')->where('category_id', $categoryId)->get();
+        }
+
+        $categories = Category::all();
+        return view('post.index', compact('posts', 'categories'));
     }
 
     /**
