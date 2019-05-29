@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Category;
 use App\Post;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -17,31 +16,18 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::with('category')->get();
-
-        return view('post.index', compact('posts'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        $categories = Category::all();
-
-        return view('post.create', compact('categories'));
+        return response()->json($posts);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $path = Storage::disk('public')->putFile('images', $request->file('image'));
+        $path = $request->file('image')->store('public/images');
 
         $post = Post::create([
             'category_id'  => $request->get('category_id'),
@@ -51,40 +37,27 @@ class PostController extends Controller
             'youtube_link' => $request->get('youtube_link')
         ]);
 
-        return redirect()->route('posts.index');
+        return response()->json($post);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
         $post = Post::with('category')->findOrFail($id);
 
-        return redirect()->route('posts.index');
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $post = Post::with('category')->findOrFail($id);
-        $categories = Category::all();
-        return view('post.edit', compact('post','categories'));
+        return response()->json($post);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -104,13 +77,13 @@ class PostController extends Controller
         $post->youtube_link = $request->get('youtube_link');
         $post->save();
 
-        return redirect()->route('posts.index');
+        return response()->json($post);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param int $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -118,6 +91,6 @@ class PostController extends Controller
         $post = Post::findOrFail($id);
         $post->delete();
 
-        return redirect()->route('posts.index');
+        return response()->json($post);
     }
 }

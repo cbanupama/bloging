@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Category;
+use Dotenv\Validator;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
 class CategoryController extends Controller
 {
@@ -14,19 +16,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::all();
-
-        return view('category.index', compact('categories'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        return view('category.create');
+        $category = Category::all();
+        return response()->json($category);
     }
 
     /**
@@ -41,7 +32,7 @@ class CategoryController extends Controller
             'name' => $request->get('name')
         ]);
 
-        return redirect()->route('categories.index');
+        return response()->json($category);
     }
 
     /**
@@ -54,20 +45,7 @@ class CategoryController extends Controller
     {
         $category = Category::with('posts')->findOrFail($id);
 
-        return $category;
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        $category = Category::findOrFail($id);
-
-        return view('category.edit', compact('category'));
+        return response()->json($category);
     }
 
     /**
@@ -83,7 +61,7 @@ class CategoryController extends Controller
         $category->name = $request->get('name');
         $category->save();
 
-        return redirect()->route('categories.index');
+        return response()->json($category);
     }
 
     /**
@@ -95,9 +73,8 @@ class CategoryController extends Controller
     public function destroy($id)
     {
         $category = Category::findOrFail($id);
-        $category->posts()->delete();
         $category->delete();
 
-        return redirect()->route('categories.index');
+        return response()->json($category);
     }
 }
