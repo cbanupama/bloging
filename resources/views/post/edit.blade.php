@@ -31,6 +31,27 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="type"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Post Type') }}</label>
+
+                                <div class="col-md-6">
+                                    <select id="type" name="type"
+                                            class="form-control @error('type') is-invalid @enderror" required onchange="showMediaType(this)">
+                                        <option value="">Select post type</option>
+                                        <option value="image">Image only</option>
+                                        <option value="youtube">Youtube only</option>
+                                        <option value="image_youtube">Image and Youtube</option>
+                                    </select>
+
+                                    @error('type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Post title') }}</label>
 
                                 <div class="col-md-6">
@@ -59,6 +80,40 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="web_link"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Web link') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="web_link" type="text"
+                                           class="form-control @error('web_link') is-invalid @enderror" name="web_link"
+                                           value="{{ old('web_link') }}" required autofocus>
+
+                                    @error('web_link')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="web_link_title"
+                                       class="col-md-4 col-form-label text-md-right">{{ __('Web link title') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="web_link_title" type="text"
+                                           class="form-control @error('web_link_title') is-invalid @enderror"
+                                           name="web_link_title" value="{{ old('web_link_title') }}" required autofocus>
+
+                                    @error('web_link_title')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row" id="image-wrapper">
                                 <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Post image') }}</label>
 
                                 <div class="col-md-6">
@@ -72,7 +127,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row" id="youtube-wrapper">
                                 <label for="youtube_link" class="col-md-4 col-form-label text-md-right">{{ __('Post youtube link') }}</label>
 
                                 <div class="col-md-6">
@@ -99,4 +154,26 @@
             </div>
         </div>
     </div>
+@endsection
+
+@section('script')
+    <script type="text/javascript">
+        function showMediaType(e) {
+            let value = e.value;
+            let image = document.getElementById('image-wrapper');
+            let youtubeLink = document.getElementById('youtube-wrapper');
+            if(value === 'image') {
+                image.style.display = 'flex';
+                youtubeLink.style.display = 'none';
+            }
+            if(value === 'youtube') {
+                youtubeLink.style.display = 'flex';
+                image.style.display = 'none';
+            }
+            if(value === 'image_youtube') {
+                youtubeLink.style.display = 'flex';
+                image.style.display = 'flex';
+            }
+        }
+    </script>
 @endsection

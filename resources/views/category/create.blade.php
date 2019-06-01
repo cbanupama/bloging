@@ -8,7 +8,7 @@
                     <div class="card-header">{{ __('Create Category') }}</div>
 
                     <div class="card-body">
-                        <form method="POST" action="{{ route('categories.store') }}">
+                        <form method="POST" action="{{ route('categories.store') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
 
                             <div class="form-group row">
@@ -18,6 +18,20 @@
                                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autofocus>
 
                                     @error('name')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="image" class="col-md-4 col-form-label text-md-right">{{ __('Category image') }}</label>
+
+                                <div class="col-md-6">
+                                    <input id="image" type="file" class="form-control @error('image') is-invalid @enderror" name="image" required autofocus>
+
+                                    @error('image')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

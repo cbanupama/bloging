@@ -22,6 +22,9 @@
                                     <td>{{ $category->id }}</td>
                                     <td>{{ $category->name }}</td>
                                     <td>
+                                        <img src="{{ $category->image }}" alt="Image" width="50px"/>
+                                    </td>
+                                    <td>
                                         <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-sm btn-warning">Edit</a>
                                         <form method="POST" action="{{ route('categories.destroy', $category->id) }}">
                                             @method('DELETE')

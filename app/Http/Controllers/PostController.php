@@ -19,7 +19,7 @@ class PostController extends Controller
     {
         $categoryId = Input::get('category_id');
 
-        if($categoryId === '' || $categoryId === null) {
+        if ($categoryId === '' || $categoryId === null) {
             $posts = Post::with('category')->get();
         } else {
             $posts = Post::with('category')->where('category_id', $categoryId)->get();
@@ -49,14 +49,35 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $path = Storage::disk('public')->putFile('images', $request->file('image'));
+        if ($request->hasFile('image')) {
+            $path = Storage::disk('public')->putFile('images', $request->file('image'));
+        }
+
+        $youtubeLink = null;
+        $image = null;
+
+        if ($request->get('type') === 'image') {
+            $image = $path;
+        }
+
+        if ($request->get('type') === 'youtube') {
+            $youtubeLink = $request->get('youtube_link');
+        }
+
+        if ($request->get('type') === 'image_youtube') {
+            $image = $path;
+            $youtubeLink = $request->get('youtube_link');
+        }
 
         $post = Post::create([
-            'category_id'  => $request->get('category_id'),
-            'title'        => $request->get('title'),
-            'body'         => $request->get('body'),
-            'image'        => $path,
-            'youtube_link' => $request->get('youtube_link')
+            'category_id'    => $request->get('category_id'),
+            'title'          => $request->get('title'),
+            'body'           => $request->get('body'),
+            'image'          => $image,
+            'youtube_link'   => $youtubeLink,
+            'type'           => $request->get('type'),
+            'web_link'       => $request->get('web_link'),
+            'web_link_title' => $request->get('web_link_title')
         ]);
 
         return redirect()->route('posts.index');
@@ -85,7 +106,7 @@ class PostController extends Controller
     {
         $post = Post::with('category')->findOrFail($id);
         $categories = Category::all();
-        return view('post.edit', compact('post','categories'));
+        return view('post.edit', compact('post', 'categories'));
     }
 
     /**
@@ -105,11 +126,27 @@ class PostController extends Controller
             $path = $post->image;
         }
 
+        if ($request->get('type') === 'image') {
+            $post->youtube_link = null;
+            $post->image = $path;
+        }
+
+        if ($request->get('type') === 'youtube') {
+            $post->youtube_link = $request->get('youtube_link');
+            $post->image = null;
+        }
+
+        if ($request->get('type') === 'image_youtube') {
+            $post->image = $path;
+            $post->youtube_link = $request->get('youtube_link');
+        }
+
         $post->category_id = $request->get('category_id');
         $post->title = $request->get('title');
         $post->body = $request->get('body');
-        $post->image = $path;
-        $post->youtube_link = $request->get('youtube_link');
+        $post->type = $request->get('type');
+        $post->web_link = $request->get('web_link');
+        $post->web_link_title = $request->get('web_link_title');
         $post->save();
 
         return redirect()->route('posts.index');

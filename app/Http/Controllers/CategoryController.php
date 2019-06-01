@@ -37,8 +37,11 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $category = Category::create([
-            'name' => $request->get('name')
+        $path = $request->file('image')->store('public/images');
+
+        Category::create([
+            'name' => $request->get('name'),
+            'image' => $path
         ]);
 
         return redirect()->route('categories.index');
@@ -80,7 +83,15 @@ class CategoryController extends Controller
     public function update(Request $request, $id)
     {
         $category = Category::findOrFail($id);
+
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('public/images');
+        } else {
+            $path = $category->image;
+        }
+
         $category->name = $request->get('name');
+        $category->image = $path;
         $category->save();
 
         return redirect()->route('categories.index');

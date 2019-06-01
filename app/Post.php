@@ -12,7 +12,10 @@ class Post extends Model
         'title',
         'body',
         'image',
-        'youtube_link'
+        'youtube_link',
+        'type',
+        'web_link',
+        'web_link_title'
     ];
 
     public function getImageAttribute($value)
