@@ -56,17 +56,16 @@ class PostController extends Controller
         $youtubeLink = null;
         $image = null;
 
-        if ($request->get('type') === 'image') {
+        if ($request->get('type') === 'only_image') {
             $image = $path;
         }
 
-        if ($request->get('type') === 'youtube') {
+        if ($request->get('type') === 'youtube_post') {
             $youtubeLink = $request->get('youtube_link');
         }
 
-        if ($request->get('type') === 'image_youtube') {
+        if ($request->get('type') === 'image_post') {
             $image = $path;
-            $youtubeLink = $request->get('youtube_link');
         }
 
         $post = Post::create([
@@ -126,19 +125,19 @@ class PostController extends Controller
             $path = $post->image;
         }
 
-        if ($request->get('type') === 'image') {
+        if ($request->get('type') === 'only_image') {
             $post->youtube_link = null;
             $post->image = $path;
         }
 
-        if ($request->get('type') === 'youtube') {
+        if ($request->get('type') === 'youtube_post') {
             $post->youtube_link = $request->get('youtube_link');
             $post->image = null;
         }
 
-        if ($request->get('type') === 'image_youtube') {
+        if ($request->get('type') === 'image_post') {
             $post->image = $path;
-            $post->youtube_link = $request->get('youtube_link');
+//            $post->youtube_link = $request->get('youtube_link');
         }
 
         $post->category_id = $request->get('category_id');
