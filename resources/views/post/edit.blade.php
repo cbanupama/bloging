@@ -38,9 +38,9 @@
                                     <select id="type" name="type"
                                             class="form-control @error('type') is-invalid @enderror" required onchange="showMediaType(this)">
                                         <option value="">Select post type</option>
-                                        <option value="image">Image only</option>
-                                        <option value="youtube">Youtube only</option>
-                                        <option value="image_youtube">Image and Youtube</option>
+                                        <option value="only_image">Image only</option>
+                                        <option value="youtube_post">Youtube Post</option>
+                                        <option value="image_post">Image Post</option>
                                     </select>
 
                                     @error('type')
@@ -162,16 +162,16 @@
             let value = e.value;
             let image = document.getElementById('image-wrapper');
             let youtubeLink = document.getElementById('youtube-wrapper');
-            if(value === 'image') {
+            if(value === 'only_image') {
                 image.style.display = 'flex';
                 youtubeLink.style.display = 'none';
             }
-            if(value === 'youtube') {
+            if(value === 'youtube_post') {
                 youtubeLink.style.display = 'flex';
                 image.style.display = 'none';
             }
-            if(value === 'image_youtube') {
-                youtubeLink.style.display = 'flex';
+            if(value === 'image_post') {
+                youtubeLink.style.display = 'none';
                 image.style.display = 'flex';
             }
         }
